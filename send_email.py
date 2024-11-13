@@ -1,13 +1,15 @@
 import smtplib
 from email.mime.text import MIMEText
+from cryptography.hazmat.primitives import serialization
 from dotenv import load_dotenv
 import os
+import encryption
 
 # Load variables from the .env file
 load_dotenv()
 
 # Access the app password
-app_pass = os.getenv('APP_PASS')  # Retrieve the API key
+app_pass = os.getenv("APP_PASS")  # Retrieve the API key
 if not app_pass:
     raise EnvironmentError("APP_PASS not found in .env file or environment variables")
 
@@ -37,4 +39,12 @@ def send_email(message, receiver_email):
         print(f"Failed to send email notification: {e}")
 
 
-send_email("hi", "recipient_email")
+# Load the recipient's public key from a PEM file
+with open("public_key.pem", "rb") as pem_file:
+    public_key = serialization.load_pem_public_key(pem_file.read())
+
+# Encrypt the message
+MESSAGE = "hello"
+encrypted_message_hex = encryption.encrypt_message(MESSAGE, public_key)
+
+send_email(encrypted_message_hex, "recipient_email")
