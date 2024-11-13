@@ -10,7 +10,7 @@ encrypted_message = bytes.fromhex(encrypted_message_hex)
 
 password = input("Enter your password: ")
 # Load the private key from a PEM file
-with open("private_key.pem", "rb") as pem_file:
+with open("recipient_private_key.pem", "rb") as pem_file:
     try:
         private_key = serialization.load_pem_private_key(
             pem_file.read(),

@@ -7,7 +7,7 @@ def encrypt_message(message, public_key):
 
     # Encrypt the message using the public key
     encrypted_message = public_key.encrypt(
-        message,
+        message.encode(),
         padding.OAEP(
             mgf=padding.MGF1(algorithm=hashes.SHA256()),
             algorithm=hashes.SHA256(),

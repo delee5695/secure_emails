@@ -40,11 +40,11 @@ def send_email(message, receiver_email):
 
 
 # Load the recipient's public key from a PEM file
-with open("public_key.pem", "rb") as pem_file:
+with open("recipient_public_key.pem", "rb") as pem_file:
     public_key = serialization.load_pem_public_key(pem_file.read())
 
 # Encrypt the message
 MESSAGE = "hello"
 encrypted_message_hex = encryption.encrypt_message(MESSAGE, public_key)
 
-send_email(encrypted_message_hex, "recipient_email")
+send_email(encrypted_message_hex, "your_email")
