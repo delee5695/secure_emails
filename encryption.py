@@ -1,5 +1,18 @@
 from cryptography.hazmat.primitives import serialization, hashes
 from cryptography.hazmat.primitives.asymmetric import padding
+import sys
+
+# Increase max int digits
+sys.set_int_max_str_digits(100000)
+
+
+def convert_message_to_int(message):
+    """convert message(str) to integers"""
+    converted_message = ""
+    for i in message:
+        int_letter = "{:03d}".format(ord(i))  # convert single letter to integer
+        converted_message += str(int_letter)
+    return int(converted_message)
 
 
 def encrypt_message(message, public_key):
