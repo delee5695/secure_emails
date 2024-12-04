@@ -83,7 +83,9 @@ def modular_inverse(e: int, phi_n: int) -> int:
 
     # Ensure the result is positive
     # p is the private key, and doing mod phi_n ensures it's within [0,phi_n-1]
-    return p % phi_n
+    p = p % phi_n
+    
+    return p
 
 
 def generate_key(p: int, q: int) -> \
