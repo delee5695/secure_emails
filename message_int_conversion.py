@@ -7,26 +7,32 @@ def convert_message_to_int(message):
     """Convert message (str) to a single long integer."""
     converted_message = ""
     for i in message:
-        int_letter = "{:03d}".format(
+        int_letter = "{:04d}".format(
             ord(i)
         )  # Convert single letter to zero-padded ASCII
         converted_message += int_letter
-    return int(converted_message)  # Return as integer
+    return converted_message  # Return as integer
 
 
-def convert_int_to_message(int_message):
+def convert_int_to_message(str_message):
     """Convert the long integer back to the original message."""
     # Increase the max string length for integer conversion
-    str_message = str(int_message)
+    print(str_message)
     original_message = ""
-    for i in range(0, len(str_message), 3):
-        original_message += chr(int(str_message[i : i + 3]))
+    for i in range(0, len(str_message), 4):
+        original_message += chr(int(str_message[i : i + 4]))
 
     return original_message
 
 
 # Example Usage
-original_message = "hello" * 1000  # Example of a very long message
+original_message = (
+    """MESSAGE
+
+Hey, we are Sally and Zara, presenting our security final project about sending secured email with RSA cryptosystem! Thanks:)
+"""
+    * 100
+)  # Example of a very long message
 int_message = convert_message_to_int(original_message)
 decoded_message = convert_int_to_message(int_message)
 
