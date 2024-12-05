@@ -119,7 +119,7 @@ def generate_key(p: int, q: int) -> \
 
 
 def encrypt(public_key: tuple[int, int], plaintext: int) -> int:
-    """Encrypt the given plaintext using the recipient's public key.
+    """ Encrypt the given plaintext using the recipient's public key.
 
     Preconditions:
         - public_key is a valid RSA public key (n, e)
@@ -127,7 +127,13 @@ def encrypt(public_key: tuple[int, int], plaintext: int) -> int:
     """
     n, e = public_key[0], public_key[1]
 
-    encrypted = (plaintext ** e) % n
+
+    # Directly computing plaintext ** e with large numbers is very 
+    # computationally inefficient, but python has a built in 
+    # function that implements it more efficiently.
+
+    # This is the same as: encrypted = (plaintext ** e) % n
+    encrypted = pow(plaintext, e, n)
 
     return encrypted
 
@@ -142,6 +148,7 @@ def decrypt(private_key: tuple[int, int],
     """
     n, d = private_key[0], private_key[1]
 
-    decrypted = (message ** d) % n
+    # This is the same as: decrypted = (message ** d) % n
+    decrypted = pow(message, d, n)
 
     return decrypted
