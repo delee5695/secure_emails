@@ -1,5 +1,3 @@
-# Modified from https://www.teach.cs.toronto.edu/~csc110y/fall/notes/08-cryptography/05-rsa-cryptosystem-implementation.html
-
 import random
 import math
 
@@ -12,7 +10,7 @@ def naive_modular_inverse(e, phi_n):
     possible value of d to see if multiplying it by e (mod phi_n)
     equals one.
 
-    Not used.
+    Not actually used in our script.
 
     Args:
         e: number to be inverted (int)
