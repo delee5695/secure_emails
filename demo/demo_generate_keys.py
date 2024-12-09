@@ -1,6 +1,13 @@
 # For demo: Run this script to generate a public and private key.
 
+import sys
+import os
+
+# Import rsa module from parent directory
+parent_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+sys.path.append(parent_dir)
 import rsa
+
 
 # Choose two random prime numbers
 p = 999999999999999999999999999999999841

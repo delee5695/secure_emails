@@ -5,8 +5,13 @@ import email
 from dotenv import load_dotenv
 from ast import literal_eval
 import os
+import sys
 
+# Import rsa module from parent directory
+parent_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+sys.path.append(parent_dir)
 import rsa
+
 
 # Access the app password
 load_dotenv()
