@@ -1,6 +1,6 @@
 # Modified from https://www.teach.cs.toronto.edu/~csc110y/fall/notes/08-cryptography/05-rsa-cryptosystem-implementation.html
 
-import random
+import secrets
 import math
 
 
@@ -25,14 +25,14 @@ def naive_modular_inverse(e, phi_n):
 
     for potential_d in range(0, phi_n - 1):
         x = e * potential_d % phi_n
-    
+
         if x == 1:
             d = potential_d
             break
 
     if d is None:
         raise ValueError(f"No modular inverse exists for e={e} and phi_n={phi_n}.")
-    
+
     return d
 
 
@@ -84,12 +84,11 @@ def modular_inverse(e: int, phi_n: int) -> int:
     # Ensure the result is positive
     # p is the private key, and doing mod phi_n ensures it's within [0,phi_n-1]
     p = p % phi_n
-    
+
     return p
 
 
-def generate_key(p: int, q: int) -> \
-        tuple[tuple[int, int], tuple[int, int]]:
+def generate_key(p: int, q: int) -> tuple[tuple[int, int], tuple[int, int]]:
     """Return an RSA key pair generated using primes p and q.
 
     The return value is a tuple containing two tuples:
@@ -108,9 +107,9 @@ def generate_key(p: int, q: int) -> \
 
     # Since e is chosen randomly, we repeat the random choice
     # until e is coprime to phi_n.
-    e = random.randint(2, phi_n - 1)
+    e = secrets.randbelow(phi_n - 2)
     while math.gcd(e, phi_n) != 1:
-        e = random.randint(2, phi_n - 1)
+        e = secrets.randbelow(phi_n - 2)
 
     # Choose d such that e * d % phi_n = 1.
     d = modular_inverse(e, phi_n)
@@ -119,7 +118,7 @@ def generate_key(p: int, q: int) -> \
 
 
 def encrypt(public_key: tuple[int, int], plaintext: int) -> int:
-    """ Encrypt the given plaintext using the recipient's public key.
+    """Encrypt the given plaintext using the recipient's public key.
 
     Preconditions:
         - public_key is a valid RSA public key (n, e)
@@ -127,9 +126,8 @@ def encrypt(public_key: tuple[int, int], plaintext: int) -> int:
     """
     n, e = public_key[0], public_key[1]
 
-
-    # Directly computing plaintext ** e with large numbers is very 
-    # computationally inefficient, but python has a built in 
+    # Directly computing plaintext ** e with large numbers is very
+    # computationally inefficient, but python has a built in
     # function that implements it more efficiently.
 
     # This is the same as: encrypted = (plaintext ** e) % n
@@ -138,8 +136,7 @@ def encrypt(public_key: tuple[int, int], plaintext: int) -> int:
     return encrypted
 
 
-def decrypt(private_key: tuple[int, int], 
-                message: int) -> int:
+def decrypt(private_key: tuple[int, int], message: int) -> int:
     """Decrypt the given ciphertext using the recipient's private key.
 
     Preconditions:
@@ -152,3 +149,38 @@ def decrypt(private_key: tuple[int, int],
     decrypted = pow(message, d, n)
 
     return decrypted
+
+
+def string_to_chunks(message: str, chunk_size: int) -> list[int]:
+    """Convert a message to chunks of integers based on the chunk size."""
+    message_bytes = message.encode("utf-8")
+    chunks = [
+        int.from_bytes(message_bytes[i : i + chunk_size], "big")
+        for i in range(0, len(message_bytes), chunk_size)
+    ]
+    return chunks
+
+
+def chunks_to_string(chunks: list[int], chunk_size: int) -> str:
+    """Convert chunks of integers back into a string."""
+    message_bytes = b"".join(chunk.to_bytes(chunk_size, "big") for chunk in chunks)
+    return message_bytes.decode("utf-8")
+
+
+def encrypt_long_message(public_key: tuple[int, int], message: str) -> list[int]:
+    """Encrypt a long message using RSA."""
+    n, e = public_key
+    max_chunk_size = (n.bit_length() // 8) - 1  # Ensure the chunk fits in n
+    chunks = string_to_chunks(message, max_chunk_size)
+    encrypted_chunks = [pow(chunk, e, n) for chunk in chunks]
+    return encrypted_chunks
+
+
+def decrypt_long_message(
+    private_key: tuple[int, int], encrypted_chunks: list[int]
+) -> str:
+    """Decrypt a long message using RSA."""
+    n, d = private_key
+    max_chunk_size = (n.bit_length() // 8) - 1
+    decrypted_chunks = [pow(chunk, d, n) for chunk in encrypted_chunks]
+    return chunks_to_string(decrypted_chunks, max_chunk_size)
