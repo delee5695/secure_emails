@@ -12,7 +12,7 @@ def naive_modular_inverse(e, phi_n):
     possible value of d to see if multiplying it by e (mod phi_n)
     equals one.
 
-    Not used.
+    Not actually used in our script.
 
     Args:
         e: number to be inverted (int)
@@ -37,15 +37,16 @@ def naive_modular_inverse(e, phi_n):
 
 
 def extended_euclidean_gcd(a: int, b: int) -> tuple[int, int, int]:
-    """Return the gcd of a and b, and integers p and q such that
+    """
+    Return the gcd of a and b, and integers p and q such that
     gcd(a, b) == p * a + q * b.
 
     Helper function for modular_inverse.
 
     Returns:
         x: The gcd of a and b, your input numbers.
-        p
-        q
+        p_x
+        q_x
 
     Preconditions:
     - a >= 0
