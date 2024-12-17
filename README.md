@@ -2,6 +2,7 @@
 
 We created an implementation of RSA in python that doesn't use any external libraries. You can use our script to enter a message, encrypt it with RSA, send it to someone, and have them decrypt it.
 
+### What's in this repo?
 
 This repo contains three parts.
 
@@ -12,7 +13,7 @@ with_library/ contains a more "official" implementation of RSA from pyca/cryptog
 demo/ contains scripts for running the in-class demo of our code.
 
 
-Sources: 
+### Sources
 - https://www.teach.cs.toronto.edu/~csc110y/fall/notes/08-cryptography/05-rsa-cryptosystem-implementation.html
     - We used this sit as our intial source for explaining the math behind RSA, and we used the 
     encryption/decryption functions provided as a starting point for our RSA functions.
