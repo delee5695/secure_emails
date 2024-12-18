@@ -75,7 +75,7 @@ def send_email(message, receiver_email):
             server.starttls()
             server.login(smtp_username, smtp_password)
             server.sendmail(sender_email, receiver_email, msg.as_string())
-        # print("Email notification sent successfully!")
+        print("Email notification sent successfully!")
     except Exception as e:
         print(f"Failed to send email notification: {e}")
 
